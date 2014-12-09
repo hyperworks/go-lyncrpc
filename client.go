@@ -5,8 +5,8 @@ import (
 	"net/rpc/jsonrpc"
 )
 
-type Client struct {
-	rpc *rpc.Client
+type client struct {
+	*rpc.Client
 }
 
 func Dial(network, address string) (LyncRPC, error) {
@@ -15,9 +15,9 @@ func Dial(network, address string) (LyncRPC, error) {
 		return nil, e
 	}
 
-	return &Client{rpc: rpcClient}, nil
+	return &client{rpcClient}, nil
 }
 
-func (client *Client) Login() error {
-	return client.rpc.Call("LOGIN", &loginRequest{}, &loginResponse{})
+func (client *client) Login() error {
+	return client.Call("LOGIN", &loginRequest{}, &loginResponse{})
 }
