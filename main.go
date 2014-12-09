@@ -1,17 +1,17 @@
 package main
 
 import (
-	"os"
 	"log"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"os"
 )
 
 type TestService struct{}
 
 type HelloArg struct{ Name string }
-type HelloResult struct { Line string }
+type HelloResult struct{ Line string }
 
 func (ts *TestService) Hello(args *HelloArg, result *HelloResult) error {
 	*result = HelloResult{
