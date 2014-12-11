@@ -1,7 +1,6 @@
 package lyncrpc
 
 import (
-	"fmt"
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"time"
@@ -30,12 +29,20 @@ func (client *client) Hello(name string) (string, error) {
 func (client *client) Date() (time.Time, error) {
 	response := ""
 	e := client.Call("DATE", map[string]string{}, &response)
-	fmt.Println("response: " + response)
 	if e != nil {
 		return time.Time{}, nil
 	}
 
 	return time.Parse(time.RFC3339, response)
+}
+
+func (client *client) SignIn(serverUrl, username, password string) error {
+	request := map[string]string{
+		"ServerUrl": serverUrl,
+		"Username":  username,
+		"Password":  password,
+	}
+	return client.Call("SIGNIN", request, nil)
 }
 
 func (client *client) Login() error {
