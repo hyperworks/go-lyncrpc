@@ -1,5 +1,4 @@
 #!/bin/sh
 
-go install .
-go-lync $@
+go run example/main.go
 

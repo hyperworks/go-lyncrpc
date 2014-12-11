@@ -1,9 +1,10 @@
 package lyncrpc
 
 import (
+	"fmt"
 	"net/rpc"
-	"time"
 	"net/rpc/jsonrpc"
+	"time"
 )
 
 type client struct {
@@ -28,7 +29,8 @@ func (client *client) Hello(name string) (string, error) {
 
 func (client *client) Date() (time.Time, error) {
 	response := ""
-	e := client.Call("DATE", NoParams, &response)
+	e := client.Call("DATE", map[string]string{}, &response)
+	fmt.Println("response: " + response)
 	if e != nil {
 		return time.Time{}, nil
 	}
