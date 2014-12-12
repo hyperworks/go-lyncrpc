@@ -45,6 +45,6 @@ func (client *client) SignIn(serverUrl, username, password string) error {
 	return client.Call("SIGNIN", request, nil)
 }
 
-func (client *client) Login() error {
-	return client.Call("LOGIN", nil, nil)
+func (client *client) SignOut() error {
+	return client.Call("SIGNOUT", nil, nil)
 }
