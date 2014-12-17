@@ -34,4 +34,4 @@ type Bot interface {
 	AcceptChatSession(uri string) (ChatSession, error)
 	JoinRoom(roomName, nick string) (GroupChatSession, bool, error)
 	RequestProvisioning(prefix string) error
-	*/
+*/

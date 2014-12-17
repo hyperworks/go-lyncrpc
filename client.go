@@ -1,6 +1,7 @@
 package lyncrpc
 
 import (
+	"fmt"
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"time"
@@ -10,7 +11,7 @@ type client struct {
 	*rpc.Client
 }
 
-func Dial(network, address string) (LyncRPC, error) {
+func Dial(network, address string) (Interface, error) {
 	rpcClient, e := jsonrpc.Dial(network, address)
 	if e != nil {
 		return nil, e
@@ -20,10 +21,18 @@ func Dial(network, address string) (LyncRPC, error) {
 }
 
 func (client *client) Hello(name string) (string, error) {
-	request := &struct{ Name string }{name}
 	response := ""
-	e := client.Call("HELLO", request, &response)
+	e := client.Call("HELLO", arg("Name", name), &response)
 	return response, e
+}
+
+func (client *client) Ping() error {
+	response := ""
+	e := client.Call("PING", nil, &response)
+	if e == nil && response != "PONG" {
+		e = fmt.Errorf("PONG reply not received!")
+	}
+	return e
 }
 
 func (client *client) Date() (time.Time, error) {
@@ -57,12 +66,27 @@ func (client *client) Availability() (string, error) {
 }
 
 func (client *client) SetAvailability(availability string) error {
-	request := map[string]string{"Availability": availability}
-	return client.Call("SET_AVAILABILITY", request, nil)
+	return client.Call("SET_AVAILABILITY", arg("Availability", availability), nil)
 }
 
 func (client *client) Contacts() ([]*Contact, error) {
 	result := []*Contact{}
 	e := client.Call("CONTACTS", nil, &result)
 	return result, e
+}
+
+func (client *client) BeginConversation(recipientUri string) error {
+	return client.Call("BEGIN_CONVERSATION", arg("RecipientUri", recipientUri), nil)
+}
+
+func (client *client) SendMessage(message string) error {
+	return client.Call("SEND_MESSAGE", arg("Message", message), nil)
+}
+
+func (client *client) EndConversation() error {
+	return client.Call("END_CONVERSATION", nil, nil)
+}
+
+func arg(key, value string) map[string]string {
+	return map[string]string{key: value}
 }
