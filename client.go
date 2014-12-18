@@ -79,8 +79,18 @@ func (client *client) BeginConversation(recipientUri string) error {
 	return client.Call("BEGIN_CONVERSATION", arg("RecipientUri", recipientUri), nil)
 }
 
+func (client *client) AcceptConversation() error {
+	return client.Call("ACCEPT_CONVERSATION", nil, nil)
+}
+
 func (client *client) SendMessage(message string) error {
 	return client.Call("SEND_MESSAGE", arg("Message", message), nil)
+}
+
+func (client *client) ReceiveMessage() (string, error) {
+	response := ""
+	e := client.Call("RECEIVE_MESSAGE", nil, &response)
+	return response, e
 }
 
 func (client *client) EndConversation() error {

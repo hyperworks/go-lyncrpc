@@ -21,6 +21,8 @@ type Interface interface {
 	SetAvailability(availability string) error
 	Contacts() ([]*Contact, error)
 	BeginConversation(recipientUri string) error
+	AcceptConversation() error
 	SendMessage(message string) error
+	ReceiveMessage() (string, error)
 	EndConversation() error
 }
